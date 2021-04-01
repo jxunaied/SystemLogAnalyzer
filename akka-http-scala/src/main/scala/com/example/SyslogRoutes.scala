@@ -12,8 +12,8 @@ import akka.actor.typed.scaladsl.AskPattern._
 import akka.util.Timeout
 
 final case class Status(status: String)
-//final case class SysData(dateTimeFrom: String, dateTimeUntil: String, searchPhrase: String)
-//final case class SysHistogram(dateTimeFrom: String, dateTimeUntil: String, searchPhrase: String)
+final case class SysData(dateTimeFrom: String, dateTimeUntil: String, searchPhrase: String)
+final case class SysHistogram(dateTimeFrom: String, dateTimeUntil: String, searchPhrase: String)
 
 trait SyslogRoutes {
 
@@ -26,7 +26,7 @@ trait SyslogRoutes {
         pathEnd {
           concat(
             get {
-              complete(s"check")
+              complete(s"SysLog")
             })
         }~ path("get_status") {      
                   get {        
@@ -41,13 +41,13 @@ trait SyslogRoutes {
                     }
                   } 
             }~ path("data") {      
-                  post {    
+                  get {    
                     entity(as[SysData]) { data =>
                       complete(SysLog.getSysData(data))
                     }    
                   } 
             }~ path("histogram") {      
-                  post {        
+                  post {     
                     entity(as[SysHistogram]) { histogram =>
                       complete(SysLog.getHistogramData(histogram))
                     }  

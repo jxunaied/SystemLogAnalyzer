@@ -18,7 +18,7 @@ class App extends Component {
   //Get Status
   fetchStatus = () => {
     fetch('http://localhost:8080/api/get_status',{
-      crossDomain:true,
+      mode: 'no-cors',
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -27,6 +27,7 @@ class App extends Component {
     .then((res) => {
       res.json()
     }).then((res) =>{
+      console.log(res)
       this.setState({ status: res.status }) 
     });
   }
@@ -34,7 +35,7 @@ class App extends Component {
   //Get File Size
   fetchSize = () => {
     fetch('http://localhost:8080/api/get_size',{
-      crossDomain:true,
+      mode: 'no-cors',
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -54,7 +55,7 @@ class App extends Component {
     const data = new FormData(event.target);
 
     fetch('http://localhost:8080/api/data',{
-      crossDomain:true,
+      mode: 'no-cors',
       method: "POST",
       body:data,
       headers: {
@@ -75,7 +76,7 @@ class App extends Component {
     const data = new FormData(event.target);
 
     fetch('http://localhost:8080/api/histogram',{
-      crossDomain:true,
+      mode: 'no-cors',
       method: "POST",
       body:data,
       headers: {
@@ -97,10 +98,10 @@ class App extends Component {
         <br></br>
           <div class="container">
             <button onClick={this.fetchStatus}>Check Status</button>
-            <label>Status: Ok </label>  
+            <label>Status:  {this.status}</label>  
             {/* <label>Status: {{ status }} </label> */}
             <button onClick={this.fetchSize}>Check Filesize</button>
-            <label>Log File Size: Ok </label>
+            <label>Log File Size: {this.size} </label>
             {/* <label>Log File Size: {{ size }} </label> */}
           </div>
           <br></br>
@@ -121,26 +122,18 @@ class App extends Component {
           <div>
             <table >
               <tr>
-                <th>Month</th>
                 <th>Date</th>
-                <th>Time</th>
-                <th>Server Name</th>
-                <th>PID</th>
-                <th>Log</th>
+                <th>Message</th>
               </tr>
             
-              {/* {this.state.logData.map(( listValue, index ) => {
+              {this.state.logData.map(( listValue, index ) => {
                   return (
                     <tr key={index}>
-                      <td>{{listValue.}}</td>
-                      <td>{{listValue.}}</td>
-                      <td>{{listValue.}}</td>
-                      <td>{{listValue.}}</td>
-                      <td>{{listValue.}}</td>
-                      <td>{{listValue.}}</td>
+                      <td>{listValue.value.date}</td>
+                      <td>{listValue.value.message}</td>
                     </tr>
                   );
-              })} */}
+              })}
               
             </table>
           </div>
@@ -168,39 +161,9 @@ class App extends Component {
                 height={'300px'}
                 chartType="Histogram"
                 loader={<div>Loading Chart</div>}
-                data={[
-                  ['Dinosaur', 'Length'],
-                  ['Acrocanthosaurus (top-spined lizard)', 12.2],
-                  ['Albertosaurus (Alberta lizard)', 9.1],
-                  ['Allosaurus (other lizard)', 12.2],
-                  ['Apatosaurus (deceptive lizard)', 22.9],
-                  ['Archaeopteryx (ancient wing)', 0.9],
-                  ['Argentinosaurus (Argentina lizard)', 36.6],
-                  ['Baryonyx (heavy claws)', 9.1],
-                  ['Brachiosaurus (arm lizard)', 30.5],
-                  ['Ceratosaurus (horned lizard)', 6.1],
-                  ['Coelophysis (hollow form)', 2.7],
-                  ['Compsognathus (elegant jaw)', 0.9],
-                  ['Deinonychus (terrible claw)', 2.7],
-                  ['Diplodocus (double beam)', 27.1],
-                  ['Dromicelomimus (emu mimic)', 3.4],
-                  ['Gallimimus (fowl mimic)', 5.5],
-                  ['Mamenchisaurus (Mamenchi lizard)', 21.0],
-                  ['Megalosaurus (big lizard)', 7.9],
-                  ['Microvenator (small hunter)', 1.2],
-                  ['Ornithomimus (bird mimic)', 4.6],
-                  ['Oviraptor (egg robber)', 1.5],
-                  ['Plateosaurus (flat lizard)', 7.9],
-                  ['Sauronithoides (narrow-clawed lizard)', 2.0],
-                  ['Seismosaurus (tremor lizard)', 45.7],
-                  ['Spinosaurus (spiny lizard)', 12.2],
-                  ['Supersaurus (super lizard)', 30.5],
-                  ['Tyrannosaurus (tyrant lizard)', 15.2],
-                  ['Ultrasaurus (ultra lizard)', 30.5],
-                  ['Velociraptor (swift robber)', 1.8],
-                ]}
+                data={histogramData.histogram}
                 options={{
-                  title: 'Time VS Log',
+                  title: 'Date VS Count',
                   legend: { position: 'none' },
                   colors: ['#e7711c'],
                   histogram: { lastBucketPercentile: 5 },
