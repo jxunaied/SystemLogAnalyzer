@@ -41,7 +41,7 @@ trait SyslogRoutes {
                     }
                   } 
             }~ path("data") {      
-                  get {    
+                  post {    
                     entity(as[SysData]) { data =>
                       complete(SysLog.getSysData(data))
                     }    
